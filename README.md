@@ -13,7 +13,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install(c("org.Hs.eg.db", "DESeq2", "AnnotationDbi", "clusterProfiler")
 ```
 
-Install Funm6AViewer
+Install PhenoDriver
 ```{r}
 if (!requireNamespace("devtools", quietly = TRUE))
     install.packages("devtools")
