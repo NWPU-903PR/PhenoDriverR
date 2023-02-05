@@ -17,6 +17,7 @@ Install PhenoDriver
 ```{r}
 if (!requireNamespace("devtools", quietly = TRUE))
     install.packages("devtools")
+
 devtools::install_github("NWPU-903PR/PhenoDriverR")
 ```
 
