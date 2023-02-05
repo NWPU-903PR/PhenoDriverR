@@ -6,7 +6,7 @@ R package for identifying personalized driver genes and exploring their oncogeni
 PhenoDriverR depends on org.Hs.eg.db, DESeq2, AnnotationDbi, clusterProfiler R packages from Bioconductor and please make sure they are installed before installing PhenoDriverR. An R version >= 4.1 is suggested.
 
 Install the required packages
-```{r}
+```R
 if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 
@@ -14,7 +14,7 @@ BiocManager::install(c("org.Hs.eg.db", "DESeq2", "AnnotationDbi", "clusterProfil
 ```
 
 Install PhenoDriver
-```{r}
+```R
 if (!requireNamespace("devtools", quietly = TRUE))
     install.packages("devtools")
 
