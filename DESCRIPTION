@@ -1,0 +1,16 @@
+Package: PhenoDriver
+Title: Identify personalized cancer driver genes and their associated abnormal phenotypes
+Version: 0.0.0.9000
+Authors@R: 
+  c(person("Yan", "Li", role = c("aut")),
+    person("Shao Wu", "Zhang",
+           role=c("cre", "aut"),
+           email="zhangsw@nwpu.edu.cn",
+           ))
+Imports: downloader, DESeq2, doParallel, foreach, gtools, parallel, AnnotationDbi, 
+         org.Hs.eg.db, clusterProfiler, stats, xfun, utils
+Description: What the package does (one paragraph).
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
