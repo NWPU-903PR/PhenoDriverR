@@ -3,8 +3,7 @@
 R package for identifying personalized driver genes and exploring their oncogenic mechanism
 
 ## Installation
-
-Funm6AViewer depends on org.Hs.eg.db, DESeq2, AnnotationDbi, clusterProfiler R packages from Bioconductor and please make sure they are installed before installing PhenoDriverR. An R version >= 4.1 is suggested.
+PhenoDriverR depends on org.Hs.eg.db, DESeq2, AnnotationDbi, clusterProfiler R packages from Bioconductor and please make sure they are installed before installing PhenoDriverR. An R version >= 4.1 is suggested.
 
 Install the required packages
 ```{r}
