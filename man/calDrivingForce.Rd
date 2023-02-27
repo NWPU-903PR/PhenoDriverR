@@ -42,7 +42,8 @@ enrichment p-value of upstream regulators}
 \item{th.zscore}{giving threshold of causality z-score.}
 }
 \value{
-A list consists with driving force matrix of each patient
+A list consists two elements, one of them consists with driving force matrix of every patients,
+another consists with individual z-score.
 }
 \description{
 Calculating driving force matrix for each patient

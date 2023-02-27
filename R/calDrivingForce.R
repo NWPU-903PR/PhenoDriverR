@@ -20,7 +20,8 @@
 #' @import foreach
 #' @import parallel
 #'
-#' @return A list consists with driving force matrix of each patient
+#' @return A list consists two elements, one of them consists with driving force matrix of every patients,
+#' another consists with individual z-score.
 #' @export calDrivingForce
 #'
 #' @examples
@@ -142,9 +143,18 @@ calDrivingForce <- function(network,
     }
     genescore <- genescore + signalNetadjnorm %*% genescore + signalNetadjnorm %*% signalNetadjnorm %*% genescore +
       signalNetadjnorm %*% signalNetadjnorm %*% signalNetadjnorm %*% genescore
-    return(genescore)
+    return(list(genescore = genescore, zscore_indiv = res))
   }
   if(parallelworker > 1) stopCluster(cl)
-  names(genescore_individual) <- colnames(diffexpgene$diffFC)
-  return(genescore_individual)
+  genescore <- lapply(genescore_individual, function(x){
+    if (is.null(x)) return(x)
+    else return(x[[1]])
+  })
+  zscore <- lapply(genescore_individual, function(x){
+    if (is.null(x)) return(x)
+    else return(x[[2]])
+  })
+  names(genescore) <- colnames(diffexpgene$diffFC)
+  names(zscore) <- colnames(diffexpgene$diffFC)
+  return(list(genescore = genescore, zscore = zscore))
 }

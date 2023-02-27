@@ -1,6 +1,6 @@
-Package: PhenoDriver
+Package: PhenoDriverR
 Title: Identify personalized cancer driver genes and their associated abnormal phenotypes
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
   c(person("Yan", "Li", role = c("aut")),
     person("Shao Wu", "Zhang",
@@ -8,7 +8,7 @@ Authors@R:
            email="zhangsw@nwpu.edu.cn",
            ))
 Imports: downloader, DESeq2, doParallel, foreach, gtools, parallel, AnnotationDbi, 
-         org.Hs.eg.db, clusterProfiler, stats, xfun, utils
+         org.Hs.eg.db, clusterProfiler, stats, xfun, utils, igraph
 Description: What the package does (one paragraph).
 License: GPL (>= 3)
 Encoding: UTF-8

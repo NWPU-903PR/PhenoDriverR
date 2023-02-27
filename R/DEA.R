@@ -62,7 +62,7 @@ DEA <- function(exp,
     registerDoParallel(cl)
   }
   diffRes <- foreach (i = 1:dim(exp$Tumor)[2]) %dopar% {
-    test <- data.frame(x=round(apply(exp$Normal, 1, median)*10),y=log(exp$Tumor[,i]*10 + 1))
+    test <- data.frame(x=round(apply(exp$Normal, 1, median)*10),y=log(exp$Tumor[, i]*10 + 1))
     res <- apply(test, 1, cal.pvalue, numeric.model)
     pvalue <- res[1,]
     sign <- res[2,]
