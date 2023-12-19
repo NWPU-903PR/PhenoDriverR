@@ -68,7 +68,7 @@ calDrivingForce <- function(network,
     cl <- makeCluster(parallelworker)
     doSNOW::registerDoSNOW(cl)
   }
-  pb <- txtProgressBar(max = dim(exp$Tumor)[2], style = 3)
+  pb <- txtProgressBar(max = dim(diffexpgene$diffFC)[2], style = 3)
   progress <- function(n) setTxtProgressBar(pb, n)
   opts <- list(progress = progress)
   genescore_individual <- foreach (i = 1:dim(diffexpgene$diffFC)[2], .options.snow = opts) %dopar% {
