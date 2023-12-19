@@ -11,7 +11,7 @@
 #' @param annotationcol indicate the number of column of gene annotations.
 #' @importFrom gtools combinations
 #' @importFrom stats p.adjust
-#' @import doParallel
+#' @import doSNOW
 #' @import foreach
 #' @import parallel
 #' @import progress
@@ -60,10 +60,12 @@ DEA <- function(exp,
 
   if(parallelworker > 1) {
     cl <- makeCluster(parallelworker)
-    registerDoParallel(cl)
+    registerDoSNOW(cl)
   }
-  pb <- progress_bar$new(total = dim(exp$Tumor)[2])
-  diffRes <- foreach (i = 1:dim(exp$Tumor)[2], .export = c("pb")) %dopar% {
+  pb <- txtProgressBar(max = dim(exp$Tumor)[2], style = 3)
+  progress <- function(n) setTxtProgressBar(pb, n)
+  opts <- list(progress = progress)
+  diffRes <- foreach (i = 1:dim(exp$Tumor)[2], .options.snow = opts) %dopar% {
     test <- data.frame(x=round(apply(exp$Normal, 1, median)*10),y=log(exp$Tumor[, i]*10 + 1))
     res <- apply(test, 1, cal.pvalue, numeric.model)
     pvalue <- res[1,]
@@ -72,8 +74,8 @@ DEA <- function(exp,
     pb$tick()
     return(list(pvalue = pvalue, sign = sign, padj = padj))
   }
+  close(pb)
   if(parallelworker > 1) stopCluster(cl)
-  pb$close()
   names(diffRes) <- colnames(exp$Tumor)
   diffexpgene <- list()
   diffexpgene$diffpadj <- sapply(diffRes, function(x) return(x$padj))
