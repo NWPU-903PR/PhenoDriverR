@@ -12,8 +12,6 @@
 #' @importFrom gtools combinations
 #' @importFrom stats p.adjust
 #' @import doSNOW
-#' @import foreach
-#' @import parallel
 #'
 #' @return A list consists with the differential expression p-value, p-adj and
 #' log2 fold change.
@@ -64,13 +62,12 @@ DEA <- function(exp,
   pb <- txtProgressBar(max = dim(exp$Tumor)[2], style = 3)
   progress <- function(n) setTxtProgressBar(pb, n)
   opts <- list(progress = progress)
-  diffRes <- foreach (i = 1:dim(exp$Tumor)[2], .options.snow = opts) %dopar% {
+  diffRes <- foreach (i = 1:dim(exp$Tumor)[2], .combine='list', .options.snow = opts) %dopar% {
     test <- data.frame(x=round(apply(exp$Normal, 1, median)*10),y=log(exp$Tumor[, i]*10 + 1))
     res <- apply(test, 1, cal.pvalue, numeric.model)
     pvalue <- res[1,]
     sign <- res[2,]
     padj <- p.adjust(pvalue, 'BH')
-    pb$tick()
     return(list(pvalue = pvalue, sign = sign, padj = padj))
   }
   close(pb)
