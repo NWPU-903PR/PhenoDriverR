@@ -1,6 +1,6 @@
 Package: PhenoDriverR
 Title: Identify personalized cancer driver genes and their associated abnormal phenotypes
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: 
   c(person("Yan", "Li", role = c("aut")),
     person("Shao Wu", "Zhang",

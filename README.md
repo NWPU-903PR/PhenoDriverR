@@ -5,6 +5,11 @@ R package for identifying personalized driver genes and exploring their oncogeni
 ## Installation
 PhenoDriverR depends on org.Hs.eg.db, DESeq2, AnnotationDbi, clusterProfiler R packages from Bioconductor and please make sure they are installed before installing PhenoDriverR. An R version >= 4.1 is suggested.
 
+To speed up matrix product, it is highly recommended to install openblas library first. For ubuntu, run the following command:
+```shall
+sudo apt install libopenblas-dev
+```
+
 Install the required packages
 ```R
 if (!requireNamespace("BiocManager", quietly = TRUE))
