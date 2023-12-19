@@ -16,10 +16,7 @@
 #' @param th.enrich giving threshold of enrichment p-value.
 #' @param th.zscore giving threshold of causality z-score.
 #' @importFrom clusterProfiler enricher
-#' @import doParallel
-#' @import foreach
-#' @import parallel
-#' @import progress
+#' @import doSNOW
 #'
 #' @return A list consists two elements, one of them consists with driving force matrix of every patients,
 #' another consists with individual z-score.
@@ -67,10 +64,12 @@ calDrivingForce <- function(network,
 
   if(parallelworker > 1) {
     cl <- makeCluster(parallelworker)
-    registerDoParallel(cl)
+    doSNOW::registerDoSNOW(cl)
   }
-  pb <- progress_bar$new(total = dim(diffexpgene$diffFC)[2])
-  genescore_individual <- foreach (i = 1:dim(diffexpgene$diffFC)[2], .export = c("pb")) %dopar% {
+  pb <- txtProgressBar(max = dim(exp$Tumor)[2], style = 3)
+  progress <- function(n) setTxtProgressBar(pb, n)
+  opts <- list(progress = progress)
+  genescore_individual <- foreach (i = 1:dim(diffexpgene$diffFC)[2], .options.snow = opts) %dopar% {
     enrichgene <- strsplit(enrichreactomeRes[[i]]$geneID[enrichreactomeRes[[i]]$pvalue <= th.path], '/')
     enrichname <- enrichreactomeRes[[i]]$ID[enrichreactomeRes[[i]]$pvalue <= th.path]
     pathpvalue <- enrichreactomeRes[[i]]$pvalue[enrichreactomeRes[[i]]$pvalue <= th.path]
@@ -145,11 +144,10 @@ calDrivingForce <- function(network,
     }
     genescore <- genescore + signalNetadjnorm %*% genescore + signalNetadjnorm %*% signalNetadjnorm %*% genescore +
       signalNetadjnorm %*% signalNetadjnorm %*% signalNetadjnorm %*% genescore
-    pb$tick()
     return(list(genescore = genescore, zscore_indiv = res))
   }
+  close(pb)
   if(parallelworker > 1) stopCluster(cl)
-  pd$close()
   genescore <- lapply(genescore_individual, function(x){
     if (is.null(x)) return(x)
     else return(x[[1]])

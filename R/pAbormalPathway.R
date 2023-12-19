@@ -11,9 +11,7 @@
 #' @param th.diff giving threshold of differentially expression pvalue.
 #' @importFrom clusterProfiler enricher
 #' @importFrom stats p.adjust
-#' @import doParallel
-#' @import foreach
-#' @import parallel
+#' @import doSNOW
 #'
 #' @return  the results of enrichment analysis for every patient.
 #' @export pAbnormalPathway
@@ -35,9 +33,12 @@ pAbnormalPathway <- function(diff,
   else if (th.diff.type == 'p.adj') allpvalue <- diff$diffpadj
   if(parallelworker > 1) {
     cl <- makeCluster(parallelworker)
-    registerDoParallel(cl)
+    doSNOW::registerDoSNOW(cl)
   }
-  enrichreactomeRes <- foreach(i = 1:dim(allpvalue)[2])  %dopar% {
+  pb <- txtProgressBar(max = dim(exp$Tumor)[2], style = 3)
+  progress <- function(n) setTxtProgressBar(pb, n)
+  opts <- list(progress = progress)
+  enrichreactomeRes <- foreach(i = 1:dim(allpvalue)[2], .options.snow = opts)  %dopar% {
     tmp <- clusterProfiler::enricher(rownames(allpvalue)[abs(allpvalue[, i]) < th.diff],
                                      TERM2GENE = reactome[, c(4, 1)],
                                      universe = rownames(allpvalue),
@@ -45,6 +46,7 @@ pAbnormalPathway <- function(diff,
                                      maxGSSize = 1500)
     return(tmp@result)
   }
+  close(pb)
   if(parallelworker > 1) stopCluster(cl)
   names(enrichreactomeRes) <- colnames(allpvalue)
 
