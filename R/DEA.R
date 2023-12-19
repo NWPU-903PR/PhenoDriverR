@@ -14,6 +14,7 @@
 #' @import doParallel
 #' @import foreach
 #' @import parallel
+#' @import progress
 #'
 #' @return A list consists with the differential expression p-value, p-adj and
 #' log2 fold change.
@@ -61,16 +62,18 @@ DEA <- function(exp,
     cl <- makeCluster(parallelworker)
     registerDoParallel(cl)
   }
-  diffRes <- foreach (i = 1:dim(exp$Tumor)[2]) %dopar% {
+  pb <- progress_bar$new(total = dim(exp$Tumor)[2])
+  diffRes <- foreach (i = 1:dim(exp$Tumor)[2], .export = c("pb")) %dopar% {
     test <- data.frame(x=round(apply(exp$Normal, 1, median)*10),y=log(exp$Tumor[, i]*10 + 1))
     res <- apply(test, 1, cal.pvalue, numeric.model)
     pvalue <- res[1,]
     sign <- res[2,]
     padj <- p.adjust(pvalue, 'BH')
+    pb$tick()
     return(list(pvalue = pvalue, sign = sign, padj = padj))
   }
   if(parallelworker > 1) stopCluster(cl)
-
+  pb$close()
   names(diffRes) <- colnames(exp$Tumor)
   diffexpgene <- list()
   diffexpgene$diffpadj <- sapply(diffRes, function(x) return(x$padj))

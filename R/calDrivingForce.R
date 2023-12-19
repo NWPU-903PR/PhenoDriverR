@@ -70,7 +70,7 @@ calDrivingForce <- function(network,
     registerDoParallel(cl)
   }
   pb <- progress_bar$new(total = dim(diffexpgene$diffFC)[2])
-  genescore_individual <- foreach (i = 1:dim(diffexpgene$diffFC)[2]) %dopar% {
+  genescore_individual <- foreach (i = 1:dim(diffexpgene$diffFC)[2], .export = c("pb")) %dopar% {
     enrichgene <- strsplit(enrichreactomeRes[[i]]$geneID[enrichreactomeRes[[i]]$pvalue <= th.path], '/')
     enrichname <- enrichreactomeRes[[i]]$ID[enrichreactomeRes[[i]]$pvalue <= th.path]
     pathpvalue <- enrichreactomeRes[[i]]$pvalue[enrichreactomeRes[[i]]$pvalue <= th.path]
@@ -149,6 +149,7 @@ calDrivingForce <- function(network,
     return(list(genescore = genescore, zscore_indiv = res))
   }
   if(parallelworker > 1) stopCluster(cl)
+  pd$close()
   genescore <- lapply(genescore_individual, function(x){
     if (is.null(x)) return(x)
     else return(x[[1]])
