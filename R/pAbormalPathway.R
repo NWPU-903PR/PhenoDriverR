@@ -12,6 +12,8 @@
 #' @importFrom clusterProfiler enricher
 #' @importFrom stats p.adjust
 #' @import doSNOW
+#' @import foreach
+#' @import parallel
 #'
 #' @return  the results of enrichment analysis for every patient.
 #' @export pAbnormalPathway

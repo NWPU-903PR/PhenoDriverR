@@ -12,6 +12,8 @@
 #' @importFrom gtools combinations
 #' @importFrom stats p.adjust
 #' @import doSNOW
+#' @import foreach
+#' @import parallel
 #'
 #' @return A list consists with the differential expression p-value, p-adj and
 #' log2 fold change.

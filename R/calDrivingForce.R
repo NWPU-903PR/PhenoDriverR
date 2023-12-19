@@ -17,6 +17,8 @@
 #' @param th.zscore giving threshold of causality z-score.
 #' @importFrom clusterProfiler enricher
 #' @import doSNOW
+#' @import foreach
+#' @import parallel
 #'
 #' @return A list consists two elements, one of them consists with driving force matrix of every patients,
 #' another consists with individual z-score.
