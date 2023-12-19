@@ -9,7 +9,7 @@ Authors@R:
            ))
 Imports: downloader, DESeq2, doParallel, foreach, gtools, parallel, AnnotationDbi, 
          org.Hs.eg.db, clusterProfiler, stats, xfun, utils, igraph, TCGAbiolinks,
-         plyr, purrr, R.utils, readr, magrittr, dplyr, progress
+         plyr, purrr, R.utils, readr, magrittr, dplyr, doSNOW
 Description: What the package does (one paragraph).
 License: GPL (>= 3)
 Encoding: UTF-8

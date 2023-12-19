@@ -14,7 +14,6 @@
 #' @import doSNOW
 #' @import foreach
 #' @import parallel
-#' @import progress
 #'
 #' @return A list consists with the differential expression p-value, p-adj and
 #' log2 fold change.
