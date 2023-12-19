@@ -59,7 +59,7 @@ DEA <- function(exp,
 
   if(parallelworker > 1) {
     cl <- makeCluster(parallelworker)
-    registerDoSNOW(cl)
+    doSNOW::registerDoSNOW(cl)
   }
   pb <- txtProgressBar(max = dim(exp$Tumor)[2], style = 3)
   progress <- function(n) setTxtProgressBar(pb, n)
