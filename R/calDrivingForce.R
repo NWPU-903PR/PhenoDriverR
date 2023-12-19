@@ -19,6 +19,7 @@
 #' @import doParallel
 #' @import foreach
 #' @import parallel
+#' @import progress
 #'
 #' @return A list consists two elements, one of them consists with driving force matrix of every patients,
 #' another consists with individual z-score.
@@ -68,6 +69,7 @@ calDrivingForce <- function(network,
     cl <- makeCluster(parallelworker)
     registerDoParallel(cl)
   }
+  pb <- progress_bar$new(total = dim(diffexpgene$diffFC)[2])
   genescore_individual <- foreach (i = 1:dim(diffexpgene$diffFC)[2]) %dopar% {
     enrichgene <- strsplit(enrichreactomeRes[[i]]$geneID[enrichreactomeRes[[i]]$pvalue <= th.path], '/')
     enrichname <- enrichreactomeRes[[i]]$ID[enrichreactomeRes[[i]]$pvalue <= th.path]
@@ -143,6 +145,7 @@ calDrivingForce <- function(network,
     }
     genescore <- genescore + signalNetadjnorm %*% genescore + signalNetadjnorm %*% signalNetadjnorm %*% genescore +
       signalNetadjnorm %*% signalNetadjnorm %*% signalNetadjnorm %*% genescore
+    pb$tick()
     return(list(genescore = genescore, zscore_indiv = res))
   }
   if(parallelworker > 1) stopCluster(cl)
