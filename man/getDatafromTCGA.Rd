@@ -56,7 +56,7 @@ getDatafromTCGA(
 \item{geneType}{Only indicated gene type will be reserved.}
 
 \item{cleanDownload}{Should downloaded data be deleted?}
-
+}
 \value{
 A list with the results
 }
